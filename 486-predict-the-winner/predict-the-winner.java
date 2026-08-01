@@ -1,25 +1,19 @@
 class Solution {
     public boolean predictTheWinner(int[] nums) {
-        int n=nums.length;
-        return fxn(0,n-1,0,0,1,nums);
+        int sum=0;
+        for(int i=0;i<nums.length;i++){
+            sum+=nums[i];
+        }
+        int sum1=fxn(0,nums.length-1,nums); int sum2=sum-sum1;
+        if(sum1>=sum2) return true;
+        else return false;
     }
-    public static boolean fxn(int l,int r,int p1,int p2,int chance,int[] nums){
-        if(l>r){
-            if(p1>=p2) return true;
-            else return false;
-        }
-        boolean player1=false;
-        boolean player2=false;
-        if(chance==1){
-            boolean path1 = fxn(l+1,r,p1+nums[l],p2,0,nums); 
-            boolean path2 = fxn(l,r-1,p1+nums[r],p2,0,nums); 
-            player1=path1 || path2;
-        }
-        else{
-            boolean path1 = fxn(l+1,r,p1,p2+nums[l],1,nums);
-            boolean path2 = fxn(l,r-1,p1,p2+nums[r],1,nums);
-            player2 = path1 && path2;
-        }
-        return player1 || player2;
+    public static int fxn(int i,int j,int[] nums){
+        if(i>j) return 0;
+        if(i==j) return nums[i];
+        int take_i=nums[i]+ Math.min(fxn(i+2,j,nums),fxn(i+1,j-1,nums));
+        int take_j=nums[j]+ Math.min(fxn(i+1,j-1,nums),fxn(i,j-2,nums));
+
+        return Math.max(take_i,take_j);
     }
 }
