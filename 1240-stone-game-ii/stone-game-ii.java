@@ -12,8 +12,9 @@ class Solution {
         else res=Integer.MAX_VALUE;
         int stone=0;
         for(int x=1;x<=Math.min(2*m,nums.length-i);x++){
-            stone+=nums[i+x-1];
+            
             if(chance==1){
+                stone+=nums[i+x-1];
                 res=Math.max(res,stone+fxn(i+x,0,Math.max(x,m),nums,dp));
             }
             else{
