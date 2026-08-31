@@ -1,33 +1,29 @@
 class Solution {
     public int[] lexicographicallySmallestArray(int[] nums, int limit) {
-        int n = nums.length;
-        int[] vec = nums.clone();
-        Arrays.sort(vec);
-
-        int groupNum = 0;
-        Map<Integer, Integer> numToGroup = new HashMap<>();
-        Map<Integer, LinkedList<Integer>> groupToList = new HashMap<>();
-
-        numToGroup.put(vec[0], groupNum);
-        groupToList.putIfAbsent(groupNum, new LinkedList<>());
-        groupToList.get(groupNum).add(vec[0]);
-
-        for (int i = 1; i < n; i++) {
-            if (Math.abs(vec[i] - vec[i - 1]) > limit) {
-                groupNum++;
+        //making duplicate sorted arr
+        int[] arr=new int[nums.length];
+        for(int i=0;i<nums.length;i++) arr[i]=nums[i];
+        Arrays.sort(arr);
+        //making groups of reachable elements with limit
+        HashMap<Integer,ArrayList<Integer>> grp=new HashMap<>();
+        HashMap<Integer,Integer> findgrp=new HashMap<>();
+        int currgrp=0;
+        grp.put(currgrp,new ArrayList<>());
+        grp.get(currgrp).add(arr[0]);
+        findgrp.put(arr[0],currgrp);
+        for(int i=1;i<nums.length;i++){
+            if(! (Math.abs(arr[i] - arr[i-1]) <= limit) ){
+                currgrp++;
+                grp.put(currgrp,new ArrayList<>());
             }
-            numToGroup.put(vec[i], groupNum);
-            groupToList.putIfAbsent(groupNum, new LinkedList<>());
-            groupToList.get(groupNum).add(vec[i]);
+            grp.get(currgrp).add(arr[i]);
+            findgrp.put(arr[i],currgrp);
         }
-
-        int[] result = new int[n];
-        for (int i = 0; i < n; i++) {
-            int num = nums[i];
-            int group = numToGroup.get(num);
-            result[i] = groupToList.get(group).pollFirst(); // Use and remove the smallest element
+        //finding actual ans
+        for(int i=0;i<nums.length;i++){
+            int g = findgrp.get(nums[i]);
+            nums[i] = grp.get(g).remove(0);
         }
-
-        return result;
+        return nums;
     }
 }
