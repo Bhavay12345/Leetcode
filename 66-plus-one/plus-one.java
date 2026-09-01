@@ -1,33 +1,14 @@
 class Solution {
     public int[] plusOne(int[] digits) {
-        Stack<Integer> st= new Stack<>();
-        int n= digits.length;
-        int zero=0; int i=0;
-        while(i<n){
-            if(i==n-1){
-                if(digits[i]==9){
-                    zero++;
-                    while(!st.isEmpty() && st.peek()==9){
-                        zero++;
-                        st.pop();
-                    }
-                    if(!st.isEmpty()){
-                        int num=st.pop();
-                        st.push(num+1);
-                    }
-                    else st.push(1);
-                }
-                else st.push(digits[i]+1);
+        for(int i=digits.length-1;i>=0;i--){
+            if(digits[i]<9){
+                digits[i]++;
+                return digits; // when ans settle in same arr
             }
-            else st.push(digits[i]);
-            i++;
+            digits[i]=0;
         }
-        int size= st.size() + zero ;
-        int[] ans = new int[size];
-        for(i=0;i<size;i++){
-            if(i<st.size()) ans[i]=st.get(i);
-            
-        }
+        int[] ans= new int[digits.length+1]; // if all are 9 in digits
+        ans[0]=1;
         return ans;
     }
 }
